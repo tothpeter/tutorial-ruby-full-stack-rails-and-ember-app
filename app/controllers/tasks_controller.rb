@@ -17,6 +17,7 @@ class TasksController < ApplicationController
   def create
     @task = Task.new(task_params)
     @task.project = relationship_params[:project]
+    @task.offer   = relationship_params[:offer]
 
     if @task.save
       render json: @task, status: :created, location: @task
@@ -28,6 +29,7 @@ class TasksController < ApplicationController
   # PATCH/PUT /tasks/1
   def update
     @task.project = relationship_params[:project] if relationship_params[:project]
+    @task.offer   = relationship_params[:offer] if relationship_params[:offer]
 
     if @task.update(task_params)
       render json: @task

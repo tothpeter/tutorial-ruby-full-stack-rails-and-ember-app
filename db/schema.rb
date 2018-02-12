@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180211143410) do
+ActiveRecord::Schema.define(version: 20180212121024) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -43,11 +43,27 @@ ActiveRecord::Schema.define(version: 20180211143410) do
     t.index ["company_id"], name: "index_contacts_on_company_id"
   end
 
+  create_table "contacts_offers", force: :cascade do |t|
+    t.bigint "contact_id"
+    t.bigint "offer_id"
+    t.index ["contact_id"], name: "index_contacts_offers_on_contact_id"
+    t.index ["offer_id"], name: "index_contacts_offers_on_offer_id"
+  end
+
   create_table "contacts_projects", force: :cascade do |t|
     t.bigint "contact_id"
     t.bigint "project_id"
     t.index ["contact_id"], name: "index_contacts_projects_on_contact_id"
     t.index ["project_id"], name: "index_contacts_projects_on_project_id"
+  end
+
+  create_table "offers", force: :cascade do |t|
+    t.string "name"
+    t.float "price"
+    t.integer "status", default: 0
+    t.datetime "valid_until"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "projects", force: :cascade do |t|
@@ -68,6 +84,8 @@ ActiveRecord::Schema.define(version: 20180211143410) do
   end
 
   add_foreign_key "contacts", "companies"
+  add_foreign_key "contacts_offers", "contacts"
+  add_foreign_key "contacts_offers", "offers"
   add_foreign_key "contacts_projects", "contacts"
   add_foreign_key "contacts_projects", "projects"
   add_foreign_key "tasks", "projects"
